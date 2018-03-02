@@ -1,0 +1,52 @@
+<h1 class="productName"><%= @product.name %></h1>
+<p class="productDescription">Description: <%= @product.description %></p>
+<p class="productPrice">Price: <%= @product.price %></p>
+<p class="productInventory">Inventory: <%= @product.inventory %></p>
+<a href="#" class="js-next" data-id="<%=@product.id%>">Next Product</a>
+
+
+<script id="js-script" type="text/javascript" charset="utf-8">
+    var nextLink = document.getElementsByClassName('js-next')[0]
+
+    nextLink.addEventListener('click', (event) => {
+      event.preventDefault()
+      var nextId = parseInt(event.target.dataset.id) + 1
+      $.getJSON("/products/" + nextId + "/data", data => {
+        const h1 = document.createElement('h1')
+        h1.className = 'productName'
+        h1.innerText = data["name"]
+
+        let descP = document.createElement('p')
+        descP.className = 'productDescription'
+        descP.innerText = 'Description: ' + data["description"]
+
+        let priceP = document.createElement('p')
+        priceP.className = 'productPrice'
+        priceP.innerText = 'Price: ' + data["price"]
+
+        let invP = document.createElement('p')
+        invP.className = 'productInventory'
+        invP.innerText = 'Inventory: ' + data["inventory"]
+
+        let a = document.createElement('a')
+        a.className = 'js-next'
+        a.innerText = "Next Product"
+        a.setAttribute("href", '#')
+        a.setAttribute("data-id", nextId)
+
+        let script = document.createElement('script')
+        script.id = 'js-script'
+        script.type = "text/javascript"
+        script.charset="utf-8"
+        script.innerHTML = document.getElementById('js-script').innerHTML
+
+        document.body.innerHTML = ""
+        document.body.appendChild(h1)
+        document.body.appendChild(descP)
+        document.body.appendChild(priceP)
+        document.body.appendChild(invP)
+        document.body.appendChild(a)
+        document.body.appendChild(script)
+      });
+    })
+</script>
